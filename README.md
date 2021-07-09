@@ -19,7 +19,7 @@ go get -u github.com/kloudyuk/crawl
 
 ## Example
 
-The following example shows how to get a customized list of Lambda functions across all accounts & regions using this library
+The following example shows how to get a list of Lambda functions across all accounts & regions using this library
 
 ```go
 package main
