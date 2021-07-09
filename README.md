@@ -36,7 +36,8 @@ import (
 )
 
 // Define the function we want to run in every account & region
-// The function signature must match the signature at https://github.com/kloudyuk/crawl/blob/main/crawl.go#L18: 
+// The function signature must match the signature at:
+// https://github.com/kloudyuk/crawl/blob/main/crawl.go#L18
 func getLambdas(ctx context.Context, cfg aws.Config) (interface{}, error) {
   svc := lambda.NewFromConfig(cfg)
   in := &lambda.ListFunctionsInput{}
