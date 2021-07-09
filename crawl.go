@@ -13,9 +13,9 @@ import (
 )
 
 var errorc = make(chan error)
-var resultsc = make(chan []interface{})
+var resultsc = make(chan interface{})
 
-type CrawlFunc func(context.Context, aws.Config) ([]interface{}, error)
+type CrawlFunc func(context.Context, aws.Config) (interface{}, error)
 
 func Exec(fn CrawlFunc) []interface{} {
 
@@ -33,7 +33,7 @@ func Exec(fn CrawlFunc) []interface{} {
 			case err := <-errorc:
 				log.Fatal(err)
 			case r := <-resultsc:
-				results = append(results, r...)
+				results = append(results, r)
 			}
 		}
 	}()
