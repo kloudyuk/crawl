@@ -86,7 +86,7 @@ func crawlRegion(ctx context.Context, cfg aws.Config, wg *sync.WaitGroup, profil
 	cfg.Region = region
 	results, err := fn(ctx, cfg)
 	if err != nil {
-		errorc <- err
+		errorc <- fmt.Errorf("profile: %s, region: %s, error: %s", profile, region, err)
 		return
 	}
 
