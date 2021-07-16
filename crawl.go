@@ -15,7 +15,7 @@ import (
 var errorc = make(chan error)
 var resultsc = make(chan interface{})
 
-type CrawlFunc func(context.Context, aws.Config) (interface{}, error)
+type CrawlFunc func(context.Context, string, aws.Config) (interface{}, error)
 
 func Exec(fn CrawlFunc) []interface{} {
 
@@ -57,14 +57,12 @@ func crawlAccount(wg *sync.WaitGroup, profile string, fn CrawlFunc) {
 
 	cfg, err := config.LoadDefaultConfig(ctx, config.WithSharedConfigProfile(profile))
 	if err != nil {
-		errorc <- fmt.Errorf("profile: %s, error: %s", profile, err)
-		return
+		log.Fatal(err)
 	}
 
 	regions, err := util.GetRegions(ctx, cfg)
 	if err != nil {
-		errorc <- fmt.Errorf("profile: %s, error: %s", profile, err)
-		return
+		log.Fatal(err)
 	}
 
 	var regionWG sync.WaitGroup
@@ -84,7 +82,8 @@ func crawlRegion(ctx context.Context, cfg aws.Config, wg *sync.WaitGroup, profil
 	defer wg.Done()
 
 	cfg.Region = region
-	results, err := fn(ctx, cfg)
+
+	results, err := fn(ctx, profile, cfg)
 	if err != nil {
 		errorc <- fmt.Errorf("profile: %s, region: %s, error: %s", profile, region, err)
 		return
